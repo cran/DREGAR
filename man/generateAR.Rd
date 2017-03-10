@@ -46,7 +46,8 @@
   
   \seealso{
     %% ~~objects to See Also as \code{\link{help}}, ~~~
-    \code{\link{dregar}} , 
+    \code{\link{dregar2}} , 
+    \code{\link{dregar6}} , 
     \code{\link{sim.dregar}}
   }
 \examples{

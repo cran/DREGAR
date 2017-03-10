@@ -1,7 +1,8 @@
 `regarma`<-function ( x, y, ar = 0, ma = 0, 
                       normalize = FALSE   ,
                       debug = FALSE, rep = 50 , 
-                      pen=0, criteria=3) {
+                      pen=0, criteria=3,
+                      verb=0) {
   if (pen) requireNamespace('msgps')
   BIC=c() ; pen = pen; criteria = criteria ; rep=max(rep,1)#CP AICc GCV BIC
   if ( debug == TRUE ) {Rprof ( tf <- "nplregarma.log",  memory.profiling = TRUE ) } 
@@ -98,7 +99,7 @@
     }
     new.coefs=c( 0, j,  fillWithZero ( ar.value, lar ) , fillWithZero ( ma.value, lma ), btas )
     coef.matrix[,j] =  new.coefs 
-    L=sum(dnorm(s2.error, mean(s2.error,trim = .05), sd(s2.error), log=T))
+    L=sum(dnorm(s2.error, mean(s2.error,trim = .01), sd(s2.error), log=T))
     k=sum(s2.regarma.coeffs!=0)
     BIC[j]           = -2*L + k *  log(ly)
     if ( mar>0 && rep>1 && mma>0) {
@@ -111,9 +112,9 @@
     }
   } 
   b = which(BIC==min(BIC))[1];#b=rep
-  #   if(length(BIC)>1){
-  #     plot(BIC,type='b',xlim=c(0,rep+1),xlab='Iteration'); abline(v=b,col=2);text(x = b,y=max(BIC),labels=paste('--',(b),'--'),bg='white',font = 2,col=2)
-  #   }
+  if(length(BIC)>1 && verb==1){
+    plot(BIC,type='b',xlim=c(0,rep+1),xlab='Iteration'); abline(v=b,col=2);text(x = b,y=max(BIC),labels=paste('--',(b),'--'),bg='white',font = 2,col=2)
+  }
   btas = as.vector(coef.matrix[-c(1:2),b])
   vars = splitname(btas = btas , x , lar , lma)
   btas = vars$btas ;   ar.value = vars$ar.v ;   ma.value = vars$ma.v

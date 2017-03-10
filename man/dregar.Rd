@@ -1,15 +1,15 @@
-\name{dregar}
-\alias{dregar}
+\name{dregar2}
+\alias{dregar2}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 %%  ~~function to do ... ~~
-Estimating DREGAR coefficients
+Estimating (just) adaptive-DREGAR coefficients using an iterative 2-step procedure
 }
 \description{
- Estimating coefficients for penalized/non-penalized dynamic regression in the presence of autocorrelated residuals.
+ Estimating coefficients for penalized/non-penalized dynamic regression in the presence of autocorrelated residuals using an iterative 2-step procedure.
 }
 \usage{
-dregar(data, da = 0, ar = 0, mselection = 4, 
+dregar2(data, da = 0, ar = 0, mselection = 4, 
        normalize = FALSE, penalized = TRUE, 
        iteration = 15)
 }
@@ -54,18 +54,24 @@ The number of iterations
 
   \seealso{
     %% ~~objects to See Also as \code{\link{help}}, ~~~
+    \code{\link{dregar6}} ,
     \code{\link{generateAR}} ,
     \code{\link{sim.dregar}}
   }
   
 \examples{
+par(mfrow=c(2,2))
   m=sim.dregar(n=500 ,  beta=1:4, phi=generateAR(2), theta=.3, 
                n.z.coeffs=3 , plot=TRUE) # generating data
-  r=dregar(data = m$rawdata,da = 1:2,ar = 1,mselection = 4,penalized = 1)# estimating parameters
+  r=dregar2(data = m$rawdata,da = 1:3,ar = 1:2,mselection = 4,
+            penalized = 1 )# estimating parameters using2-step adaptive-DREGAR
   round(cbind(
-    true      = c(phi=m$phi,theta=m$theta,beta=m$beta),
+    true      = c(phi=c(m$phi,0),theta=c(m$theta,0),beta=m$beta),
     estimates = c(phi=r$phi,theta=r$theta,beta=r$beta)
   )
   ,3
   )
+  plot(r$obj)
+  acf(r$res, main='Residual ACF')
+  pacf(r$res,main='Residual PACF')
 }

@@ -65,7 +65,8 @@
   \seealso{
     %% ~~objects to See Also as \code{\link{help}}, ~~~
     %%\code{\link{regarma}}, \code{\link{iregarma}}
-    \code{\link{dregar}} , 
+    \code{\link{dregar2}} , 
+    \code{\link{dregar6}} , 
     \code{\link{generateAR}}
   }
   

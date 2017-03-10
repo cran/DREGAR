@@ -53,25 +53,33 @@ sim.dregar <- function ( n = 500, beta = 1 , ind  = FALSE,
   q = length ( theta ) 
   lbeta = length ( beta ) 
   
-  if ( ind  == TRUE ) { 
-    x = rnorm ( n*length ( beta ),0, sd = 1 ) #sqrt( abs ( beta ) ) ) 
-    x = matrix ( x, ncol = lbeta, nrow = n ) 
+  if(beta[1]==0 &&  lbeta==1){
+    x = rep ( 0,n*lbeta ) #sqrt( abs ( beta ) ) ) 
+    x = matrix ( x, ncol = lbeta, nrow = n )
     x = rbind ( matrix ( 0, ncol = lbeta, nrow = p + q ), x ) 
-    colnames ( x ) = paste ( 'X', 1:length ( beta ), sep = '.' ) 
-  } else { 
-    x = matrix ( 0, ncol = lbeta, nrow = n ) 
-    for ( i in 1:lbeta ) { 
-      x [, i ] = arima.sim ( n = n, list ( ar = sign(runif(1,-1,1))*runif(0,1)) , sd = 1 ) #sqrt( abs ( beta ) ) ) 
+  }else{
+    if ( ind  == TRUE ) { 
+      x = rnorm ( n*lbeta,0, sd = 1 ) #sqrt( abs ( beta ) ) ) 
+      x = matrix ( x, ncol = lbeta, nrow = n ) 
+      x = rbind ( matrix ( 0, ncol = lbeta, nrow = p + q ), x ) 
+      colnames ( x ) = paste ( 'X', 1:lbeta, sep = '.' ) 
+    } else { 
+      x = matrix ( 0, ncol = lbeta, nrow = n ) 
+      for ( i in 1:lbeta ) { 
+        asta = arima.sim ( n = n, list ( ar = sign(runif(1,-1,1))*runif(0,1)) , sd = 1 ) #sqrt( abs ( beta ) ) ) 
+        x [, i ] = scale(asta)
+      } 
+      x = rbind ( matrix ( 0, ncol = lbeta, nrow = p + q ), x ) 
+      colnames ( x ) = paste ( 'X', 1:length ( beta ), sep = '.' ) 
     } 
-    x = rbind ( matrix ( 0, ncol = lbeta, nrow = p + q ), x ) 
-    colnames ( x ) = paste ( 'X', 1:length ( beta ), sep = '.' ) 
-  } 
+  }
   y = rep ( 0, p + q ) 
   t0 = p + q
   distrurbance = c () 
   for ( t in 1:n ) { 
     rs = 0
     rs = x [ t0 + t, ]  %*% as.matrix ( beta ) 
+
     
     js = 0
     js = phi %*% y [ ( t + t0 - 1 ) : ( t + t0 - p ) ] 

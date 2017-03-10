@@ -1,9 +1,13 @@
 export(
   generateAR,
   sim.dregar,
-  dregar
+  dregar2,
+  dregar6
 )
 
 importFrom("stats", "IQR", "arima.sim", "coef", "dnorm", "lm",
              "quantile", "rnorm", "runif", "sd", "spline")
 importFrom("utils", "Rprof", "summaryRprof")
+importFrom("graphics", "abline", "plot", "text")
+importFrom("stats", "na.omit")
+importFrom("utils", "tail")

@@ -1,4 +1,4 @@
-dregar <- function  ( data,  da = 0,  ar = 0 ,  
+dregar2 <- function  ( data,  da = 0,  ar = 0 ,  
                       mselection  =  4       ,
                       normalize = FALSE      ,  
                       penalized = TRUE      ,  
